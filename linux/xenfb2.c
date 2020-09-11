@@ -218,8 +218,13 @@ static void xenfb2_vm_close(struct vm_area_struct *vma)
     }
     mutex_unlock(&info->mm_lock);
 }
+
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5,1,0))
+#define vm_fault_t int
+#endif
+
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0))
-static int xenfb2_vm_fault(struct vm_fault *vmf)
+static vm_fault_t xenfb2_vm_fault(struct vm_fault *vmf)
 {
     struct vm_area_struct *vma = vmf->vma;
 #else
